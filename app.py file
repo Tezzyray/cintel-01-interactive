@@ -1,0 +1,29 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Agg')  # Needed to save plots as images
+from shiny.express import ui, render, input
+
+# Define UI components
+ui.page_opts(title="Histogram App")
+
+with ui.sidebar():
+    ui.input_slider("selected_number_of_bins", "Number of Bins", 0, 100, 20)
+
+# Define the histogram function
+@render.plot(alt="Histogram")
+def histogram():
+    # Generate random data
+    np.random.seed(0)
+    data = np.random.randn(1000)
+
+    # Plot the histogram
+    plt.hist(data, bins=input.selected_number_of_bins(), density=True)
+    plt.xlabel('Value')
+    plt.ylabel('Frequency')
+    plt.title('Histogram with {} bins'.format(input.selected_number_of_bins()))
+    plt.grid(True)
+
+# Run the app
+if __name__ == "__main__":
+    render()
